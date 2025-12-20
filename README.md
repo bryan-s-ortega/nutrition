@@ -38,16 +38,6 @@ The backend handles the nutritional logic and user data persistence.
     uv run uvicorn backend.main:app --reload
     ```
 
-    *Alternatively, using standard pip:*
-    ```bash
-    cd backend
-    python3 -m venv venv
-    source venv/bin/activate
-    pip install -r requirements.txt
-    cd ..
-    uvicorn backend.main:app --reload
-    ```
-
 3.  **Run Tests**:
     Verify the nutritional logic.
     ```bash
@@ -99,3 +89,19 @@ The frontend is built with Expo and can run in a browser or on a device.
 Once the backend is running, visit:
 - **Swagger UI**: `http://127.0.0.1:8000/docs`
 - **ReDoc**: `http://127.0.0.1:8000/redoc`
+
+## Quick Start (with Just)
+
+This project includes a `justfile` for convenience.
+- **Run Backend**: `just backend`
+- **Run Web App**: `just mobile-web`
+- **Run Tests**: `just test`
+- **Kill Ports**: `just kill-ports`
+
+## Troubleshooting
+
+### "Address already in use" Error
+If you restart the server and see this error, use the just recipe to clear the ports:
+```bash
+just kill-ports
+```
