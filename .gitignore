@@ -32,3 +32,6 @@ coverage/
 android/app/build
 android/app/src/main/assets/
 ios/Pods/
+
+# Mobile
+mobile/node_modules/
