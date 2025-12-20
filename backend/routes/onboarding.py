@@ -1,7 +1,13 @@
 from fastapi import APIRouter, Depends
 from sqlmodel import Session
-from backend.database import get_session
-from backend.models import User, MealPlan, Goal, Gender
+
+# Support both `backend.routes.onboarding` and `routes.onboarding` import styles.
+try:
+    from ..database import get_session
+    from ..models import User, MealPlan, Goal, Gender
+except ImportError:  # pragma: no cover
+    from database import get_session
+    from models import User, MealPlan, Goal, Gender
 
 router = APIRouter()
 
