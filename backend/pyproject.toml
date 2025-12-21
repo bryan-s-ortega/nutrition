@@ -11,4 +11,5 @@ dependencies = [
     "python-dotenv",
     "pytest",
     "httpx",
+    "requests>=2.32.5",
 ]

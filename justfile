@@ -10,7 +10,7 @@ kill-ports:
 
 # Run the Backend (FastAPI)
 backend:
-    uv run uvicorn backend.main:app --reload
+    cd backend && uv run uvicorn main:app --reload
 
 # Run the Mobile App (Web)
 mobile-web:
