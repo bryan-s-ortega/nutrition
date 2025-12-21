@@ -48,7 +48,7 @@ def onboarding(user: User, session: Session = Depends(get_session)):
     remaining_cals = target_calories - protein_cals - fats_cals
     carbs_grams = int(remaining_cals / 4)
 
-    # 6. Create Meal Plan
+    # 6. Create Meal Plan (Targets)
     meal_plan = MealPlan(
         user_id=user.id,
         calories=int(target_calories),
@@ -60,6 +60,13 @@ def onboarding(user: User, session: Session = Depends(get_session)):
 
     session.add(meal_plan)
     session.commit()
+    session.refresh(meal_plan)
+
+    # 7. Generate Meal Plan Items
+    from meal_generator import generate_meal_plan
+    generate_meal_plan(meal_plan, session)
+    
+    # Refresh to load items if we want to return them (though response model currently uses MealPlan which might not show items unless updated)
     session.refresh(meal_plan)
 
     return meal_plan

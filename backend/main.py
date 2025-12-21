@@ -6,10 +6,10 @@ from fastapi.middleware.cors import CORSMiddleware
 # or as a module/script from this directory (e.g. `uvicorn main:app`).
 try:
     from .database import create_db_and_tables
-    from .routes import onboarding
+    from .routes import onboarding, food
 except ImportError:  # pragma: no cover
     from database import create_db_and_tables
-    from routes import onboarding
+    from routes import onboarding, food
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -28,6 +28,7 @@ app.add_middleware(
 )
 
 app.include_router(onboarding.router)
+app.include_router(food.router)
 
 @app.get("/")
 def read_root():

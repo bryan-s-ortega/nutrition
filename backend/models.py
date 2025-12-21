@@ -28,3 +28,39 @@ class MealPlan(SQLModel, table=True):
     carbs: int # grams
     fats: int # grams
     name: str
+
+
+class MealType(str, Enum):
+    BREAKFAST = "breakfast"
+    LUNCH = "lunch"
+    DINNER = "dinner"
+    SNACK = "snack"
+
+class FoodSource(str, Enum):
+    MANUAL = "manual"
+    USDA = "usda"
+    OFF = "off"
+
+class FoodItem(SQLModel, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    name: str
+    calories: int
+    protein: int # grams
+    carbs: int # grams
+    fats: int # grams
+    serving_size: str # e.g. "100g" or "1 cup"
+    
+    # External Data
+    source: FoodSource = Field(default=FoodSource.MANUAL)
+    external_id: Optional[str] = Field(default=None) # fdcId or barcode
+    barcode: Optional[str] = Field(default=None)
+    brand: Optional[str] = Field(default=None)
+
+
+class MealPlanItem(SQLModel, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    meal_plan_id: int = Field(foreign_key="mealplan.id")
+    food_item_id: int = Field(foreign_key="fooditem.id")
+    amount: float # multiplier of serving size
+    meal_type: MealType
+
