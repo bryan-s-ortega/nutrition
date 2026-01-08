@@ -21,8 +21,8 @@ resource "google_sql_database_instance" "instance" {
   settings {
     tier = "db-f1-micro" # Smallest tier for development
   }
-  
-  deletion_protection  = false # Set to true for production to prevent accidental deletion
+
+  deletion_protection = false # Set to true for production to prevent accidental deletion
 }
 
 # Database
@@ -55,10 +55,10 @@ resource "google_cloud_run_service" "backend" {
     spec {
       containers {
         image = "us-docker.pkg.dev/cloudrun/container/hello" # Placeholder until we build our own
-        
+
         env {
           name  = "DATABASE_URL"
-          value = "postgresql://${var.db_user}:${var.db_password}@${google_sql_database_instance.instance.public_ip_address}:5432/nutrition_db" 
+          value = "postgresql://${var.db_user}:${var.db_password}@${google_sql_database_instance.instance.public_ip_address}:5432/nutrition_db"
           # Note: Public IP is easiest for now, but Cloud SQL Auth Proxy or VPC Connector is better for prod.
         }
       }
