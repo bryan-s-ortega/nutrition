@@ -1,107 +1,66 @@
 # Nutrition App
 
-A comprehensive mobile application for personalized meal planning and nutritional tracking, compatible with Android, iOS, and Web. The app uses nutritional theory to generate caloric and macro targets based on user objectives (Weight Loss, Muscle Gain, Maintenance).
+A comprehensive, full-stack mobile application for personalized meal planning, built with **FastAPI** and **React Native**. The project features automated infrastructure provisioning on **Google Cloud Platform** using **Terraform** and a robust CI/CD pipeline via **GitHub Actions**.
 
 ## Tech Stack
 
-- **Backend**: Python (FastAPI), SQLModel, SQLite (Dev)
-- **Frontend**: React Native, Expo, Expo Router (Web + Mobile support)
-- **Tooling**: `uv` (Python package management), `npm`
+- **Backend**: Python 3.12, FastAPI, SQLModel.
+- **Frontend**: React Native, Expo, Expo Router (Web + Mobile).
+- **Database**: PostgreSQL (Production), SQLite (Development).
+- **Infrastructure**: Terraform, Google Cloud Run, Cloud SQL, Artifact Registry.
+- **CI/CD**: GitHub Actions (Linting, Testing, Terraform Plan/Apply).
+- **Tooling**: `uv` (Python), `npm` (Node), `just` (Command Runner).
 
-## Features
+## Quick Start
 
-- **Onboarding**: Collects user biometrics (Age, Weight, Height, Gender) and objectives.
-- **Nutritional Engine**: Calculates BMR (Mifflin-St Jeor) and TDEE to generate precise Macro targets.
-- **Premium UI**: Modern, clean interface with visual data representation.
-- **Cross-Platform**: Runs seamlessly on Web, Android, and iOS.
+We use `just` to automate common tasks.
 
-## Getting Started
+1.  **Prerequisites**:
+    - [uv](https://github.com/astral-sh/uv)
+    - Node.js & npm
+    - [Just](https://github.com/casey/just) (Optional, but recommended)
+
+2.  **Start Backend**:
+    Start the backend server to handle API requests.
+    ```bash
+    just backend
+    ```
+
+3.  **Run Application**:
+    ```bash
+    # Start Frontend (Web)
+    just mobile-web
+    ```
+    Visit `http://localhost:8081` to use the app.
+
+## Development
+
+- **Linting & Formatting**:
+    ```bash
+    just lint
+    ```
+- **Tests**:
+    ```bash
+    just test
+    ```
+- **CI Check** (Simulate GitHub Actions):
+    ```bash
+    just ci
+    ```
+
+## Infrastructure & Deployment
+
+The infrastructure is fully managed as code.
 
 ### Prerequisites
+- Google Cloud Project.
+- Service Account with `Owner` or specific permissions (`Cloud Run Admin`, `Cloud SQL Admin`, etc.).
+- GCS Bucket for Terraform State (`nutrition-app-tf-state`).
 
-- Python 3.10+ and [uv](https://github.com/astral-sh/uv)
-- Node.js & npm
+### Deployment
+Deployment is automated via GitHub Actions:
+- **Pull Requests**: Runs `terraform plan` and backend tests.
+- **Push to Main**: Runs `terraform apply` to deploy changes to Cloud Run.
 
-### Backend Setup
-
-The backend handles the nutritional logic and user data persistence.
-
-1.  **Navigate to Project Root**:
-    ```bash
-    cd nutrition
-    ```
-
-2.  **Install Dependencies & Run**:
-    This project is configured to run with `uv`.
-    ```bash
-    # Run the server (auto-installs dependencies in a virtual environment)
-    uv run uvicorn backend.main:app --reload
-    ```
-
-3.  **Run Tests**:
-    Verify the nutritional logic.
-    ```bash
-    uv run pytest backend/tests
-    ```
-
-### Frontend Setup (Mobile/Web)
-
-The frontend is built with Expo and can run in a browser or on a device.
-
-1.  **Navigate to Mobile Directory**:
-    ```bash
-    cd mobile
-    ```
-
-2.  **Install Dependencies**:
-    ```bash
-    npm install
-    ```
-
-3.  **Run the App**:
-    
-    *   **Web Browser** (Recommended for quick testing):
-        ```bash
-        npm run web
-        ```
-    
-    *   **Android/iOS**:
-        Requires Android Studio or Xcode to be configured.
-        ```bash
-        npm run android
-        # OR
-        npm run ios
-        ```
-
-## Project Structure
-
-- `backend/`: FastAPI service.
-    - `main.py`: Entry point.
-    - `models.py`: Database models (User, MealPlan).
-    - `routes/`: API endpoints.
-    - `tests/`: Pytest suite.
-- `mobile/`: React Native Expo app.
-    - `app/`: Expo Router screens (index, onboarding, plan).
-    - `constants/`: Design tokens (Colors).
-
-## API Documentation
-
-Once the backend is running, visit:
-- **Swagger UI**: `http://127.0.0.1:8000/docs`
-- **ReDoc**: `http://127.0.0.1:8000/redoc`
-
-## Quick Start (with Just)
-
-This project includes a `justfile` for convenience.
-- **Run Backend**: `just backend`
-- **Run Web App**: `just mobile-web`
-- **Run Tests**: `just test`
-- **Kill Ports**: `just kill-ports`
-
-## Troubleshooting
-
-### "Address already in use" Error
-If you restart the server and see this error, use the just recipe to clear the ports:
-```bash
-just kill-ports
-```
+### Manual Setup
+See `deployment_guide.md` for details on setting up secrets (GCP_SA_KEY, etc.).
