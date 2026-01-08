@@ -23,7 +23,7 @@ lint:
 
 # Run Backend Tests
 test:
-    uv run pytest backend/tests
+    cd backend && PYTHONPATH=. uv run pytest
 
 # Run CI checks (Lint + Test)
 ci: lint test
