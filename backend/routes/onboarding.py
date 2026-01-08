@@ -11,6 +11,7 @@ except ImportError:  # pragma: no cover
 
 router = APIRouter()
 
+
 @router.post("/onboarding", response_model=MealPlan)
 def onboarding(user: User, session: Session = Depends(get_session)):
     # 1. Save User
@@ -55,7 +56,7 @@ def onboarding(user: User, session: Session = Depends(get_session)):
         protein=protein_grams,
         carbs=carbs_grams,
         fats=fats_grams,
-        name=f"Plan for {user.goal.value}"
+        name=f"Plan for {user.goal.value}",
     )
 
     session.add(meal_plan)
@@ -64,8 +65,9 @@ def onboarding(user: User, session: Session = Depends(get_session)):
 
     # 7. Generate Meal Plan Items
     from meal_generator import generate_meal_plan
+
     generate_meal_plan(meal_plan, session)
-    
+
     # Refresh to load items if we want to return them (though response model currently uses MealPlan which might not show items unless updated)
     session.refresh(meal_plan)
 
