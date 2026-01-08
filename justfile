@@ -25,5 +25,7 @@ lint:
 test:
     cd backend && PYTHONPATH=. uv run pytest
 
-# Run CI checks (Lint + Test)
-ci: lint test
+# Destroy Infrastructure (Use with CAUTION)
+destroy:
+    cd terraform && terraform destroy -auto-approve
+    @echo "Infrastructure destroyed. Trigger the GitHub Action to recreate."
