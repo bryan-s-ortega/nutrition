@@ -29,3 +29,8 @@ test:
 destroy:
     cd terraform && terraform destroy -auto-approve
     @echo "Infrastructure destroyed. Trigger the GitHub Action to recreate."
+
+# Start Cloud SQL Proxy (Requires Terraform output)
+db-proxy:
+    @echo "Fetching connection name from Terraform..."
+    cloud-sql-proxy `cd terraform && terraform output -raw database_connection_name`
