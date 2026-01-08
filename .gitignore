@@ -16,6 +16,10 @@ env/
 *.db
 backend/database.db
 
+# Terraform
+.terraform/
+.terraform*
+
 # Node / Mobile
 node_modules/
 npm-debug.log
