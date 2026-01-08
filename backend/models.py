@@ -57,6 +57,16 @@ class FoodSource(str, Enum):
     OFF = "off"
 
 
+class FoodCategory(str, Enum):
+    PROTEIN = "protein"
+    CARB = "carb"
+    FAT = "fat"
+    VEGETABLE = "vegetable"
+    FRUIT = "fruit"
+    DAIRY = "dairy"
+    MIXED = "mixed"
+
+
 class FoodItem(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     name: str
@@ -65,6 +75,9 @@ class FoodItem(SQLModel, table=True):
     carbs: int  # grams
     fats: int  # grams
     serving_size: str  # e.g. "100g" or "1 cup"
+
+    # Classification
+    category: FoodCategory = Field(default=FoodCategory.MIXED)
 
     # External Data
     source: FoodSource = Field(default=FoodSource.MANUAL)
