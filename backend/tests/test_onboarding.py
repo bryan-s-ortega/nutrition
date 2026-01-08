@@ -12,10 +12,11 @@ except ImportError:  # pragma: no cover
 # to make it easily testable, OR I can mock the session.
 # Let's try to mock the session.
 
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, patch
 
 
-def test_calculate_macros_male_weight_loss():
+@patch("backend.routes.onboarding.generate_meal_plan")
+def test_calculate_macros_male_weight_loss(mock_generate, mock_session):
     # Setup
     user = User(
         age=30,
@@ -25,6 +26,12 @@ def test_calculate_macros_male_weight_loss():
         goal=Goal.WEIGHT_LOSS,
         activity_level=1.2,
     )
+
+    # We don't need to pass session explicitly if we assume it's mocked,
+    # but the function signature requires it.
+    # Actually, the patch decorator passes the mock object as an argument.
+    # Wait, the test calls onboarding(user, session=mock_session).
+    # I successfully patched the internal call.
 
     mock_session = MagicMock()
 
@@ -50,8 +57,12 @@ def test_calculate_macros_male_weight_loss():
     assert plan.carbs == 105
     assert plan.user_id == user.id
 
+    # Verify generate_meal_plan was called
+    mock_generate.assert_called_once()
 
-def test_calculate_macros_female_muscle_gain():
+
+@patch("backend.routes.onboarding.generate_meal_plan")
+def test_calculate_macros_female_muscle_gain(mock_generate, mock_session):
     # Setup
     user = User(
         age=25,
@@ -79,3 +90,5 @@ def test_calculate_macros_female_muscle_gain():
     # Fats: 0.8 * 60 = 48g
     assert plan.protein == 120
     assert plan.fats == 48
+
+    mock_generate.assert_called_once()
