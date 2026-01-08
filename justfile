@@ -16,6 +16,14 @@ backend:
 mobile-web:
     cd mobile && npm run web
 
+# Lint and Format Check (Ruff)
+lint:
+    cd backend && uv run ruff check .
+    cd backend && uv run ruff format --check .
+
 # Run Backend Tests
 test:
     uv run pytest backend/tests
+
+# Run CI checks (Lint + Test)
+ci: lint test
