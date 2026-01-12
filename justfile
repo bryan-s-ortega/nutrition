@@ -35,7 +35,7 @@ test:
 
 # Destroy Infrastructure (Use with CAUTION)
 destroy:
-    cd terraform && terraform destroy -auto-approve
+    cd terraform && terraform destroy -auto-approve -var="project_id=$(gcloud config get-value project)" -var="db_password=destroyME"
     @echo "Infrastructure destroyed. Trigger the GitHub Action to recreate."
 
 # Start Cloud SQL Proxy (Requires Terraform output)
