@@ -31,6 +31,14 @@ app.add_middleware(
 
 app.include_router(onboarding.router)
 app.include_router(food.router)
+try:
+    from .routes import food_search
+
+    app.include_router(food_search.router)
+except ImportError:
+    from routes import food_search
+
+    app.include_router(food_search.router)
 
 
 @app.get("/")

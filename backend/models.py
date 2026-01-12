@@ -80,10 +80,33 @@ class FoodItem(SQLModel, table=True):
     category: FoodCategory = Field(default=FoodCategory.MIXED)
 
     # External Data
+    # External Data
     source: FoodSource = Field(default=FoodSource.MANUAL)
-    external_id: Optional[str] = Field(default=None)  # fdcId or barcode
-    barcode: Optional[str] = Field(default=None)
+    # USDA FDC ID or internal ref
+    external_id: Optional[str] = Field(default=None)
+
+
+class BrandedFood(SQLModel, table=True):
+    """
+    Separate table for Open Food Facts / Branded Products.
+    Not directly used in MealPlan generation (for now).
+    """
+
+    id: Optional[int] = Field(default=None, primary_key=True)
+    name: str = Field(index=True)
     brand: Optional[str] = Field(default=None)
+    barcode: Optional[str] = Field(unique=True, index=True)
+
+    # Macros per serving_size (usually normalized to 100g/ml from API)
+    calories: int
+    protein: int
+    carbs: int
+    fats: int
+    serving_size: str = Field(default="100g")
+
+    # Link back to OFF source just in case
+    external_id: Optional[str] = Field(default=None)
+    image_url: Optional[str] = Field(default=None)
 
 
 class MealPlanItem(SQLModel, table=True):
